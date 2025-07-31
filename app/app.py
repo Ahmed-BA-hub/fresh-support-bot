@@ -7,12 +7,12 @@ from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.corpus import stopwords
 from sentence_transformers import SentenceTransformer, util
 
-# ✅ Auto-download required NLTK data (safe for Streamlit Cloud)
+# ✅ Ensure required NLTK data is available (works on both local + Streamlit Cloud)
 nltk.download("punkt", quiet=True)
 nltk.download("stopwords", quiet=True)
 
-# ✅ Force SentenceTransformer to CPU for compatibility with Streamlit Cloud
-embedder = SentenceTransformer("all-MiniLM-L6-v2", device="cpu")
+# ✅ Load CPU-compatible model
+embedder = SentenceTransformer("paraphrase-MiniLM-L6-v2")
 
 # --- Preprocessing ---
 def preprocess(text):
