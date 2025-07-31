@@ -7,13 +7,9 @@ from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.corpus import stopwords
 from sentence_transformers import SentenceTransformer, util
 
-# 👉 Try local nltk_data path first
-nltk_data_path = os.path.join(os.path.dirname(__file__), "nltk_data")
-if os.path.exists(nltk_data_path):
-    nltk.data.path.append(nltk_data_path)
-else:
-    nltk.download("punkt")
-    nltk.download("stopwords")
+# ✅ Force-download punkt + stopwords at runtime if missing (works on Streamlit Cloud)
+nltk.download("punkt", quiet=True)
+nltk.download("stopwords", quiet=True)
 
 # ✅ Load sentence transformer model only once
 embedder = SentenceTransformer("all-MiniLM-L6-v2")
