@@ -1,22 +1,26 @@
 import streamlit as st
+import os
 import nltk
 import string
 
-from nltk.tokenize import sent_tokenize, word_tokenize
+from nltk.tokenize import word_tokenize, PunktSentenceTokenizer
 from nltk.corpus import stopwords
 from sentence_transformers import SentenceTransformer, util
 
-# ✅ Download required resources at runtime
-nltk.download("punkt")
-nltk.download("stopwords")
+# ✅ Download punkt + stopwords if needed (cloud-safe)
+nltk.download("punkt", quiet=True)
+nltk.download("stopwords", quiet=True)
 
-# ✅ Load the embedding model
+# ✅ Init Punkt sentence tokenizer manually (bypass weird punkt_tab error)
+tokenizer = PunktSentenceTokenizer()
+
+# ✅ Load SentenceTransformer (CPU)
 embedder = SentenceTransformer("all-MiniLM-L6-v2")
 
 # --- Preprocessing ---
 def preprocess(text):
     stop_words = set(stopwords.words("english"))
-    sentences = sent_tokenize(text)
+    sentences = tokenizer.tokenize(text)  # ⬅️ manual tokenizer here
     cleaned = []
 
     for sent in sentences:
@@ -38,7 +42,6 @@ def get_most_relevant_sentence(user_input, cleaned_sentences, original_sentences
     return original_sentences[best_idx]
 
 # --- Load Knowledge Base ---
-import os
 faq_path = os.path.join(os.path.dirname(__file__), "..", "data", "customer_faq.txt")
 with open(faq_path, "r", encoding="utf-8") as f:
     text = f.read()
