@@ -1,5 +1,4 @@
 import streamlit as st
-import os
 import nltk
 import string
 
@@ -7,11 +6,11 @@ from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.corpus import stopwords
 from sentence_transformers import SentenceTransformer, util
 
-# ✅ Automatically download necessary NLTK data at runtime
-nltk.download("punkt", quiet=True)
-nltk.download("stopwords", quiet=True)
+# ✅ Download required resources at runtime
+nltk.download("punkt")
+nltk.download("stopwords")
 
-# ✅ Load transformer model safely (no device argument)
+# ✅ Load the embedding model
 embedder = SentenceTransformer("all-MiniLM-L6-v2")
 
 # --- Preprocessing ---
@@ -39,6 +38,7 @@ def get_most_relevant_sentence(user_input, cleaned_sentences, original_sentences
     return original_sentences[best_idx]
 
 # --- Load Knowledge Base ---
+import os
 faq_path = os.path.join(os.path.dirname(__file__), "..", "data", "customer_faq.txt")
 with open(faq_path, "r", encoding="utf-8") as f:
     text = f.read()
