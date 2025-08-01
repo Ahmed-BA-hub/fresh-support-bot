@@ -3,24 +3,21 @@ import os
 import nltk
 import string
 
-from nltk.tokenize import word_tokenize, PunktSentenceTokenizer
+from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.corpus import stopwords
 from sentence_transformers import SentenceTransformer, util
 
-# ✅ Download punkt + stopwords if needed (cloud-safe)
+# ✅ Auto-download required NLTK data (safe for Streamlit Cloud)
 nltk.download("punkt", quiet=True)
 nltk.download("stopwords", quiet=True)
 
-# ✅ Init Punkt sentence tokenizer manually (bypass weird punkt_tab error)
-tokenizer = PunktSentenceTokenizer()
-
-# ✅ Load SentenceTransformer (CPU)
+# ✅ Load sentence transformer model (auto CPU-safe)
 embedder = SentenceTransformer("all-MiniLM-L6-v2")
 
 # --- Preprocessing ---
 def preprocess(text):
     stop_words = set(stopwords.words("english"))
-    sentences = tokenizer.tokenize(text)  # ⬅️ manual tokenizer here
+    sentences = sent_tokenize(text)
     cleaned = []
 
     for sent in sentences:
